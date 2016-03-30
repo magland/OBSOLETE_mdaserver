@@ -22,6 +22,12 @@ class ConfigReader(object):
 
 class MyRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
+    def translate_path(self, path):
+        if ".." in path: #to be safe?
+            return ""
+        path=self.cfg("mdachunk_data_path")+path
+	return path
+
     def do_GET(self): #handle a GET request
         mdachunk_exe        = self.cfg("mdachunk_exe")
         mda_path            = self.cfg("mda_path")
@@ -55,7 +61,8 @@ class MyRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     		else:
     			self.send_plain_text("ERROR: "+str)
     		return
-        return SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
+	else:
+            SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
     def cfg(self, key, section = 'General'):
         return self.config.get(section, key)

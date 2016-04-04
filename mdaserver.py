@@ -35,13 +35,17 @@ class MyRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         mdachunk_data_url   = self.cfg("mdachunk_data_url")
     	mda_fname=mda_path+"/"+urlparse.urlparse(self.path).path
         if self.query("a")=="size": #need to return the dimensions of the .mda
-                (str,exit_code)=self.call_and_read_output(" ".join([mdachunk_exe, "size", mda_fname]))
-    		self.send_plain_text(str)
-    		return
+            (str,exit_code)=self.call_and_read_output(" ".join([mdachunk_exe, "size", mda_fname]))
+            self.send_plain_text(str)
+            return
+        elif self.query("a")=="info": #need to return the dimensions and checksum of the .mda
+            (str,exit_code)=self.call_and_read_output(" ".join([mdachunk_exe, "info", mda_fname]))
+            self.send_plain_text(str)
+            return
         elif self.query("a")=="readChunk": #read a chunk and return url to retrieve the .mda binary data
     		print(mda_fname)
     		datatype=self.query("datatype","float32")
-    		index=self.query("index","0,0,0")
+    		index=self.query("index","0")
     		size=self.query("size","")
     		self.mkdir_if_needed(mdachunk_data_path)
     		outpath=self.query("outpath",mdachunk_data_path)

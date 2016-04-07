@@ -71,8 +71,8 @@ class MyRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         return str
 
     def handle_INFO(self, path):
-        #str = self.handle_INFO_TEXT(path)
-        str = "5,52355,1,1,1,1\n8dc26fa7b25afaf114e2188a8f62db1a99e2c35b\n1459597809000"
+        str = self.handle_INFO_TEXT(path)
+        #str = "5,52355,1,1,1,1\n8dc26fa7b25afaf114e2188a8f62db1a99e2c35b\n1459597809000"
         if self.query("output") == "text": return str
         # it would be easier if mdachunk spitted out JSON
         # but hey, let's parse the response ourselves
